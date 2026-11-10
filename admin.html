@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>B4 The Hype Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Admin: same palette and type as the public site; dense table for scanning members. */
+:root{
+  --paper:#fcfcfc; --paper-2:#f4f3ef; --ink:#141318; --muted:#6b6b6b; --label:#9a9a9a; --rule:#e8e8e8;
+  --gold:#c9a84c; --gold-ink:#9a7419; --bad:#b4483a;
+  --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --body:"Outfit","Helvetica Neue",Arial,sans-serif;
+  --mono:"Space Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--display);font-weight:300;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(2.2rem,4vw,3rem);line-height:1}
+h1 em{font-style:italic;color:var(--gold-ink)}
+h2{font-size:1.6rem}
+p{margin:0}
+.label{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--label)}
+button,input{font:inherit}
+.btn{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:2px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1a1405;font-weight:700}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left))}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--ink);padding-bottom:20px}
+.who{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+
+/* gate */
+.gate{max-width:440px;margin:12vh auto 0;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+.gate p{color:var(--muted)}
+.msg{font-size:.9rem;color:var(--bad)}
+
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule)}
+.summary div{padding:22px 20px 22px 0;display:flex;flex-direction:column-reverse;gap:6px;min-width:0}
+.summary div+div{padding-left:20px;border-left:1px solid var(--rule)}
+.summary b{font-family:var(--display);font-weight:300;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:28px 0;border-bottom:1px solid var(--rule)}
+.panels>*{min-width:0;display:flex;flex-direction:column;gap:14px}
+.bars{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.bars li{display:grid;grid-template-columns:minmax(110px,170px) 1fr 44px;gap:12px;align-items:center;font-size:.88rem}
+.bar{height:8px;background:var(--rule)}
+.bar i{display:block;height:100%;background:var(--ink)}
+.bars li.top .bar i{background:var(--gold)}
+.bars .n{font-family:var(--mono);font-size:.72rem;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.empty{color:var(--muted);font-size:.9rem}
+
+/* toolbar + table */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:24px 0 14px}
+.toolbar input{border:1px solid var(--rule);background:#fff;padding:10px 12px;border-radius:2px;min-width:0;width:min(360px,100%)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tablewrap{overflow-x:auto;border-top:1px solid var(--ink)}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--label);font-weight:400;white-space:nowrap;cursor:pointer;user-select:none}
+th[aria-sort="ascending"]::after{content:" ↑"} th[aria-sort="descending"]::after{content:" ↓"}
+td.date{font-family:var(--mono);font-size:.72rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+td.name{font-weight:500}
+td.fb{color:var(--muted);max-width:340px;white-space:pre-wrap;word-break:break-word}
+td a{color:var(--ink);text-decoration-color:var(--gold);text-underline-offset:3px}
+tr.test td{background:#fbf6e6}
+.tag{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;background:var(--gold);color:#1a1405;padding:2px 6px;border-radius:9px;margin-left:6px;vertical-align:2px}
+.del{background:none;border:0;color:var(--label);cursor:pointer;font-size:.8rem;padding:2px 4px}
+.del:hover{color:var(--bad)}
+.confirm{display:flex;gap:6px;align-items:center;white-space:nowrap;font-size:.8rem}
+.confirm button{font-size:.75rem;padding:4px 8px;border-radius:2px;cursor:pointer;border:1px solid var(--rule);background:#fff}
+.confirm .yes{border-color:var(--bad);background:var(--bad);color:#fff}
+.status{font-size:.85rem;color:var(--muted);min-height:1.2em;margin-top:12px}
+
+@media (max-width:760px){
+  .summary{grid-template-columns:1fr 1fr}
+  .summary div:nth-child(3){padding-left:0;border-left:0}
+  .summary div:nth-child(n+3){border-top:1px solid var(--rule)}
+  .panels{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <p class="label">Byron Bennett</p>
+  <h1>B4 The Hype <em>Admin</em></h1>
+  <p id="gateText">Sign in with the Google account that manages the club to see its members.</p>
+  <div><button class="btn gold" id="signInBtn" type="button">Sign in with Google</button></div>
+  <p class="msg" id="gateMsg" role="alert"></p>
+</section>
+
+<main class="wrap" id="app" hidden>
+  <header class="top">
+    <div>
+      <p class="label">Byron Bennett · Admin</p>
+      <h1>B4 The Hype <em>Club</em></h1>
+    </div>
+    <div class="who"><span id="whoami"></span><button class="btn ghost" id="signOutBtn" type="button">Sign out</button></div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <div><b id="sMembers">–</b><span class="label">Members</span></div>
+    <div><b id="sWeek">–</b><span class="label">Joined last 7 days</span></div>
+    <div><b id="sCountries">–</b><span class="label">Countries</span></div>
+    <div><b id="sVotes">–</b><span class="label">Poll votes</span></div>
+  </section>
+
+  <section class="panels">
+    <div>
+      <h2>Where members are from</h2>
+      <ul class="bars" id="countryBars"></ul>
+    </div>
+    <div>
+      <h2>Genre poll</h2>
+      <ul class="bars" id="pollBars"></ul>
+      <p class="label">Share of voters who ticked each option</p>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <label class="label" for="search" style="position:absolute;left:-9999px">Search members</label>
+    <input id="search" type="search" placeholder="Search name, email, city, Instagram, feedback">
+    <div class="tools">
+      <span class="label" id="shown"></span>
+      <button class="btn" id="csvBtn" type="button">Download CSV</button>
+    </div>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr>
+        <th data-k="at" aria-sort="descending">Joined</th>
+        <th data-k="name">Name</th>
+        <th data-k="email">Email</th>
+        <th data-k="country">Country</th>
+        <th data-k="city">City</th>
+        <th data-k="instagram">Instagram</th>
+        <th data-k="feedback">Feedback</th>
+        <th aria-label="Actions"></th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="status" id="status" role="status"></p>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyDw2qKrNAi4IbI2QIhO0J4f56CGWuXzRQA",
+  authDomain: "byron-bennett-website.firebaseapp.com",
+  projectId: "byron-bennett-website",
+  storageBucket: "byron-bennett-website.firebasestorage.app",
+  messagingSenderId: "375769530",
+  appId: "1:375769530:web:58d8760a97e60535cff583"
+});
+const auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+const GENRES = [["folk","Indie Alt Folk"],["dance","Dance Remixes"],["rnb","Indie R&B"],["lofi","Lo-Fi Pop"],["all","Release it ALL"]];
+
+let members = [], votes = [], sortKey = "at", sortDir = -1, unsubs = [], pendingDelete = null;
+
+$("signInBtn").onclick = async () => {
+  $("gateMsg").textContent = "";
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch (e) {
+    $("gateMsg").textContent = e.code === "auth/unauthorized-domain"
+      ? "This web address isn't on Firebase's list of allowed domains yet. Add it under Authentication → Settings → Authorized domains."
+      : e.code === "auth/operation-not-allowed"
+      ? "Google sign-in isn't switched on yet. Turn it on under Authentication → Sign-in method → Google."
+      : e.code === "auth/popup-closed-by-user" ? "" : "Sign-in didn't work: " + (e.message || e.code);
+  }
+};
+$("signOutBtn").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  unsubs.forEach(u => u()); unsubs = [];
+  if (!user || user.isAnonymous) { $("app").hidden = true; $("gate").hidden = false; return; }
+  $("whoami").textContent = user.email;
+  unsubs.push(onSnapshot(collection(db, "signups"), snap => {
+    members = snap.docs.map(d => ({ id: d.id, ...d.data(), at: d.data().at?.toDate?.() || null }));
+    $("gate").hidden = true; $("app").hidden = false;
+    render();
+  }, err => {
+    $("app").hidden = true; $("gate").hidden = false;
+    $("gateText").textContent = "Signed in as " + user.email + ".";
+    $("gateMsg").textContent = err.code === "permission-denied"
+      ? "This account doesn't have admin access. Sign out and use the club's admin account."
+      : "Members couldn't load: " + err.message;
+    $("signInBtn").textContent = "Sign in with a different account";
+    $("signInBtn").onclick = async () => { await signOut(auth); $("signInBtn").textContent = "Sign in with Google"; $("signInBtn").onclick = null; location.reload(); };
+  }));
+  unsubs.push(onSnapshot(collection(db, "votes"), snap => { votes = snap.docs.map(d => d.data()); renderPoll(); }));
+});
+
+function isTest(m) { return /test/i.test(m.name || "") || /@example\.com$/i.test(m.email || ""); }
+function fmt(d) { return d ? d.toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" }) : "—"; }
+function cell(tag, cls, text) { const el = document.createElement(tag); if (cls) el.className = cls; el.textContent = text ?? ""; return el; }
+
+function filtered() {
+  const q = $("search").value.trim().toLowerCase();
+  let list = members.filter(m => !q || [m.name, m.email, m.country, m.city, m.instagram, m.feedback].some(v => String(v || "").toLowerCase().includes(q)));
+  list.sort((a, b) => {
+    let x = a[sortKey], y = b[sortKey];
+    if (sortKey === "at") { x = x ? x.getTime() : 0; y = y ? y.getTime() : 0; }
+    else { x = String(x || "").toLowerCase(); y = String(y || "").toLowerCase(); }
+    return x < y ? -sortDir : x > y ? sortDir : 0;
+  });
+  return list;
+}
+
+function render() {
+  const now = Date.now(), week = members.filter(m => m.at && now - m.at.getTime() < 7 * 864e5).length;
+  const byC = {}; members.forEach(m => { if (m.country) byC[m.country] = (byC[m.country] || 0) + 1; });
+  $("sMembers").textContent = members.length;
+  $("sWeek").textContent = week;
+  $("sCountries").textContent = Object.keys(byC).length;
+  bars($("countryBars"), Object.entries(byC).sort((a, b) => b[1] - a[1]).slice(0, 10), v => v, "No members yet.");
+
+  const list = filtered(), tb = $("rows"); tb.innerHTML = "";
+  $("shown").textContent = list.length === members.length ? members.length + " shown" : list.length + " of " + members.length + " shown";
+  if (!list.length) { const tr = document.createElement("tr"); const td = cell("td", "empty", members.length ? "No members match that search." : "No one has joined yet. New sign-ups appear here instantly."); td.colSpan = 8; tr.append(td); tb.append(tr); }
+  list.forEach(m => {
+    const tr = document.createElement("tr"); if (isTest(m)) tr.className = "test";
+    const name = cell("td", "name", m.name); if (isTest(m)) name.append(cell("span", "tag", "TEST"));
+    const email = document.createElement("td"); const a = document.createElement("a"); a.href = "mailto:" + (m.email || ""); a.textContent = m.email || ""; email.append(a);
+    const ig = document.createElement("td");
+    if (m.instagram) { const l = document.createElement("a"); l.href = "https://www.instagram.com/" + m.instagram.replace(/^@/, "") + "/"; l.target = "_blank"; l.rel = "noopener"; l.textContent = m.instagram; ig.append(l); }
+    const act = document.createElement("td");
+    if (pendingDelete === m.id) {
+      const box = cell("span", "confirm", "Delete? ");
+      const yes = cell("button", "yes", "Delete"); yes.type = "button"; yes.onclick = () => removeMember(m);
+      const no = cell("button", "", "Keep"); no.type = "button"; no.onclick = () => { pendingDelete = null; render(); };
+      box.append(yes, no); act.append(box);
+    } else {
+      const del = cell("button", "del", "Delete"); del.type = "button"; del.setAttribute("aria-label", "Delete " + (m.name || "member"));
+      del.onclick = () => { pendingDelete = m.id; render(); }; act.append(del);
+    }
+    tr.append(cell("td", "date", fmt(m.at)), name, email, cell("td", "", m.country), cell("td", "", m.city), ig, cell("td", "fb", m.feedback), act);
+    tb.append(tr);
+  });
+  document.querySelectorAll("th[data-k]").forEach(th => th.setAttribute("aria-sort", th.dataset.k === sortKey ? (sortDir > 0 ? "ascending" : "descending") : "none"));
+}
+
+function renderPoll() {
+  const n = votes.length, c = {}; GENRES.forEach(([id]) => c[id] = 0);
+  votes.forEach(v => (v.choices || []).forEach(x => { if (x in c) c[x]++; }));
+  $("sVotes").textContent = n;
+  bars($("pollBars"), n ? GENRES.map(([id, name]) => [name, c[id]]) : [], v => n ? Math.round(v / n * 100) + "%" : "0%", "No votes yet.", n);
+}
+
+function bars(ul, entries, label, emptyText, denom) {
+  ul.innerHTML = "";
+  if (!entries.length) { ul.append(cell("li", "empty", emptyText)); return; }
+  const max = denom || Math.max(...entries.map(e => e[1]), 1), top = Math.max(...entries.map(e => e[1]));
+  entries.forEach(([k, v]) => {
+    const li = document.createElement("li"); if (v === top && v > 0) li.className = "top";
+    const bar = cell("div", "bar"); const i = document.createElement("i"); i.style.width = (v / max * 100) + "%"; bar.append(i);
+    li.append(cell("span", "", k), bar, cell("span", "n", label(v)));
+    ul.append(li);
+  });
+}
+
+async function removeMember(m) {
+  $("status").textContent = "Deleting " + (m.name || "member") + "…";
+  try {
+    await deleteDoc(doc(db, "signups", m.id));
+    await deleteDoc(doc(db, "fanmap", m.id)).catch(() => {});
+    pendingDelete = null;
+    $("status").textContent = "Deleted " + (m.name || "member") + ".";
+  } catch (e) { $("status").textContent = "Couldn't delete: " + e.message; }
+}
+
+$("search").addEventListener("input", render);
+document.querySelectorAll("th[data-k]").forEach(th => th.addEventListener("click", () => {
+  if (sortKey === th.dataset.k) sortDir = -sortDir; else { sortKey = th.dataset.k; sortDir = th.dataset.k === "at" ? -1 : 1; }
+  render();
+}));
+
+$("csvBtn").onclick = () => {
+  const cols = ["Joined", "Name", "Email", "Country", "City", "Instagram", "Feedback"];
+  const esc = v => { let s = String(v ?? ""); if (/^[=+\-@]/.test(s)) s = "'" + s; return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const lines = [cols.join(",")].concat(filtered().map(m => [m.at ? m.at.toISOString() : "", m.name, m.email, m.country, m.city, m.instagram, m.feedback].map(esc).join(",")));
+  const blob = new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "b4-the-hype-members-" + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+</script>
+</body>
+</html>
