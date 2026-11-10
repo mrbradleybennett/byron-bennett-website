@@ -76,6 +76,8 @@ tr.test td{background:#fbf6e6}
 .confirm{display:flex;gap:6px;align-items:center;white-space:nowrap;font-size:.8rem}
 .confirm button{font-size:.75rem;padding:4px 8px;border-radius:2px;cursor:pointer;border:1px solid var(--rule);background:#fff}
 .confirm .yes{border-color:var(--bad);background:var(--bad);color:#fff}
+.import{border:1px solid var(--gold);background:#fbf6e6;padding:18px 20px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
+.import-list{margin:0;padding-left:18px;font-size:.85rem;color:var(--muted);max-height:180px;overflow:auto}
 .status{font-size:.85rem;color:var(--muted);min-height:1.2em;margin-top:12px}
 
 @media (max-width:760px){
@@ -129,7 +131,17 @@ tr.test td{background:#fbf6e6}
     <input id="search" type="search" placeholder="Search name, email, city, Instagram, feedback">
     <div class="tools">
       <span class="label" id="shown"></span>
+      <button class="btn ghost" id="importBtn" type="button">Import CSV</button>
       <button class="btn" id="csvBtn" type="button">Download CSV</button>
+      <input type="file" id="importFile" accept=".csv,text/csv" hidden>
+    </div>
+  </div>
+  <div class="import" id="importPanel" hidden>
+    <p id="importSummary"></p>
+    <ul class="import-list" id="importList"></ul>
+    <div class="tools">
+      <button class="btn gold" id="importGo" type="button">Import members</button>
+      <button class="btn ghost" id="importCancel" type="button">Cancel</button>
     </div>
   </div>
   <div class="tablewrap">
@@ -153,7 +165,7 @@ tr.test td{background:#fbf6e6}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, deleteDoc, writeBatch, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyDw2qKrNAi4IbI2QIhO0J4f56CGWuXzRQA",
@@ -294,6 +306,94 @@ $("csvBtn").onclick = () => {
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
   a.download = "b4-the-hype-members-" + new Date().toISOString().slice(0, 10) + ".csv";
   document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- import members from a CSV ---------- */
+function parseCSV(text) {
+  const rows = []; let row = [], f = "", q = false;
+  text = text.replace(/^\ufeff/, "");
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(f); f = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+    else f += c;
+  }
+  if (f !== "" || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(r => r.some(v => v.trim() !== ""));
+}
+const MONTHS = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+function parseDate(s) {
+  s = String(s || "").trim(); if (!s) return null;
+  const m = s.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  if (m && MONTHS[m[2].slice(0, 3).toLowerCase()] !== undefined) return new Date(+m[3], MONTHS[m[2].slice(0, 3).toLowerCase()], +m[1], 12);
+  const d = new Date(s); return isNaN(d) ? null : d;
+}
+function slug(email) { return "imp-" + email.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 120); }
+let pendingImport = [];
+$("importBtn").onclick = () => $("importFile").click();
+$("importFile").onchange = async e => {
+  const file = e.target.files[0]; e.target.value = ""; if (!file) return;
+  const rows = parseCSV(await file.text());
+  if (rows.length < 2) { $("status").textContent = "That file has no member rows."; return; }
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  const col = (...names) => head.findIndex(h => names.includes(h));
+  const ci = { name: col("name"), email: col("email", "email address"), city: col("city"), country: col("country"),
+               fb: col("message", "feedback"), ig: col("instagram", "ig"), at: col("joined", "date", "date joined") };
+  if (ci.name < 0 || ci.email < 0) { $("status").textContent = "The file needs at least Name and Email columns."; return; }
+  const byEmail = new Map(); let dupes = 0, skipped = 0;
+  rows.slice(1).forEach(r => {
+    const get = i => i < 0 ? "" : String(r[i] || "").trim();
+    const email = get(ci.email).toLowerCase(), rawName = get(ci.name);
+    if (!email || !/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email)) { skipped++; return; }
+    const handle = rawName.startsWith("@") ? rawName : (get(ci.ig) ? "@" + get(ci.ig).replace(/^@/, "") : "");
+    const rec = { name: (rawName || email).slice(0, 80), email, country: get(ci.country).slice(0, 60), city: get(ci.city).slice(0, 60),
+                  instagram: handle.slice(0, 41), feedback: get(ci.fb).slice(0, 1500), at: parseDate(get(ci.at)) };
+    const prev = byEmail.get(email);
+    if (prev) {
+      dupes++;
+      if (prev.name.startsWith("@") && !rec.name.startsWith("@")) prev.name = rec.name;
+      if (!prev.instagram && rec.instagram) prev.instagram = rec.instagram;
+      ["country", "city", "feedback"].forEach(k => { if (!prev[k] && rec[k]) prev[k] = rec[k]; });
+      if (rec.at && (!prev.at || rec.at < prev.at)) prev.at = rec.at;
+    } else byEmail.set(email, rec);
+  });
+  pendingImport = [...byEmail.values()];
+  const existing = new Set(members.map(m => String(m.email || "").toLowerCase()));
+  const already = pendingImport.filter(m => existing.has(m.email)).length;
+  $("importSummary").textContent = "Ready to import " + pendingImport.length + " members from " + file.name + "."
+    + (dupes ? " " + dupes + " duplicate email" + (dupes > 1 ? "s were" : " was") + " merged." : "")
+    + (skipped ? " " + skipped + " row" + (skipped > 1 ? "s" : "") + " without a valid email will be skipped." : "")
+    + (already ? " " + already + " already in the club will be updated, not doubled." : "");
+  const ul = $("importList"); ul.innerHTML = "";
+  pendingImport.forEach(m => ul.append(cell("li", "", m.name + " · " + m.email + " · " + [m.city, m.country].filter(Boolean).join(", ") + (m.at ? " · joined " + m.at.toLocaleDateString("en-AU") : ""))));
+  $("importPanel").hidden = false; $("importGo").disabled = false;
+};
+$("importCancel").onclick = () => { pendingImport = []; $("importPanel").hidden = true; };
+$("importGo").onclick = async () => {
+  if (!pendingImport.length) return;
+  $("importGo").disabled = true; $("status").textContent = "Importing…";
+  try {
+    const existingIds = new Map(members.map(m => [String(m.email || "").toLowerCase(), m.id]));
+    for (let i = 0; i < pendingImport.length; i += 200) {
+      const batch = writeBatch(db);
+      pendingImport.slice(i, i + 200).forEach(m => {
+        const id = existingIds.get(m.email) || slug(m.email);
+        const at = Timestamp.fromDate(m.at || new Date());
+        batch.set(doc(db, "signups", id), { name: m.name, email: m.email, country: m.country, city: m.city, instagram: m.instagram, feedback: m.feedback, at });
+        if (m.country && m.city) batch.set(doc(db, "fanmap", id), { country: m.country, city: m.city, at });
+      });
+      await batch.commit();
+    }
+    $("status").textContent = "Imported " + pendingImport.length + " members.";
+    pendingImport = []; $("importPanel").hidden = true;
+  } catch (e) {
+    $("importGo").disabled = false;
+    $("status").textContent = e.code === "permission-denied"
+      ? "Import was blocked. Publish the latest Firestore rules (with admin import) and try again."
+      : "Import failed: " + e.message;
+  }
 };
 </script>
 </body>
