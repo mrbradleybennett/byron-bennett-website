@@ -499,7 +499,12 @@ h2 em.gold{color:var(--gold)}
         </div>
         <a class="cta" href="https://byron-bennett-music.myshopify.com/collections/all" target="_blank" rel="noopener">Shop all merch →</a>
       </div>
-      <div class="merch-grid">
+      <div class="merch-grid" id="merchGrid">
+        <a class="product" href="https://byron-bennett-music.myshopify.com/products/byron-bennett-8-55-album-artwork-sleeveless-tee" target="_blank" rel="noopener">
+          <div class="product-img"><span class="product-ph">8:55 Sleeveless Tee</span></div>
+          <div class="product-info"><h3>Byron Bennett 8:55 — Album Artwork Sleeveless Tee</h3><p class="price">$49.95</p></div>
+          <span class="product-cta">Shop now →</span>
+        </a>
         <a class="product" href="https://byron-bennett-music.myshopify.com/products/unisex-t-shirt-black" target="_blank" rel="noopener">
           <div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0798/1822/7735/files/unisex-staple-t-shirt-black-heather-front-6a0fb5b026692.jpg?v=1779414457&amp;width=800" alt="Black 855 unisex t-shirt" loading="lazy" decoding="async" onerror="this.remove()"><span class="product-ph">855 Tee · Black</span></div>
           <div class="product-info"><h3>855 Unisex T-Shirt</h3><p class="product-meta">Black</p><p class="price">$43.03</p></div>
@@ -896,5 +901,34 @@ const firebaseConfig = {
 })();
 </script>
 
+<script>
+/* Merch: load live products from the Shopify store; the cards above stay as a fallback. */
+(function(){
+  var SHOP="https://byron-bennett-music.myshopify.com";
+  var grid=document.getElementById("merchGrid"); if(!grid||!window.fetch) return;
+  function money(n){n=Number(n);return "$"+(n%1?n.toFixed(2):n.toFixed(0));}
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+  fetch(SHOP+"/products.json?limit=50").then(function(r){return r.json();}).then(function(j){
+    var list=(j.products||[]).filter(function(p){return p.variants&&p.variants.some(function(v){return v.available;});});
+    if(!list.length) return;
+    grid.innerHTML="";
+    list.forEach(function(p){
+      var prices=p.variants.map(function(v){return Number(v.price);}), lo=Math.min.apply(null,prices), hi=Math.max.apply(null,prices);
+      var a=el("a","product"); a.href=SHOP+"/products/"+p.handle; a.target="_blank"; a.rel="noopener";
+      var box=el("div","product-img");
+      var src=p.images&&p.images[0]&&p.images[0].src;
+      if(src){var img=document.createElement("img");img.src=src+(src.indexOf("?")>-1?"&":"?")+"width=800";img.alt=p.title;img.loading="lazy";img.decoding="async";img.onerror=function(){img.remove();};box.append(img);}
+      box.append(el("span","product-ph",p.title));
+      var info=el("div","product-info");
+      info.append(el("h3","",p.title));
+      var colours=(p.options||[]).filter(function(o){return /colou?r/i.test(o.name);})[0];
+      if(colours&&colours.values&&colours.values.length) info.append(el("p","product-meta",colours.values.join(", ")));
+      info.append(el("p","price",(lo!==hi?"From ":"")+money(lo)));
+      a.append(box,info,el("span","product-cta","Shop now →"));
+      grid.append(a);
+    });
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
