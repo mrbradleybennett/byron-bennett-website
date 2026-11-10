@@ -395,6 +395,15 @@ h2 em.gold{color:var(--gold)}
   .listen-text{display:none}
   .menu-btn{padding:8px 6px}
 }
+
+/* ---- earlier influences ---- */
+.infl-early{margin-top:40px;display:flex;flex-direction:column;gap:14px}
+.infl-early ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--rule)}
+.infl-early li{display:flex;flex-direction:column;gap:4px;padding:16px 16px 4px 0;min-width:0}
+.infl-early li+li{padding-left:16px;border-left:1px solid var(--rule)}
+.infl-early b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.15}
+.infl-early span{font-size:.85rem;color:var(--muted);font-weight:300}
+@media (max-width:760px){.infl-early ul{grid-template-columns:1fr 1fr}.infl-early li:nth-child(3){padding-left:0;border-left:0}.infl-early li:nth-child(n+3){border-top:1px solid var(--rule)}}
 </style>
 </head>
 <body>
@@ -466,8 +475,17 @@ h2 em.gold{color:var(--gold)}
     <div class="infl-grid">
       <article class="goat"><h3>Mac Miller <span class="goat-badge">The GOAT</span></h3><p>Pioneer of introspective hip-hop, blending raw vulnerability with innovative production.</p></article>
       <article><h3>Dominic Fike</h3><p>Genre-fluid storyteller fusing indie rock, pop and hip-hop with effortless authenticity.</p></article>
+      <article><h3>Fred again..</h3><p>Turns voice notes and real-life moments into euphoric, emotional electronic music.</p></article>
       <article><h3>Tai Verdes</h3><p>Indie-alternative artist crafting honest, genre-blending narratives with a distinctive voice.</p></article>
-      <article><h3>Jack Johnson</h3><p>Laid-back acoustic songwriter who turns everyday moments into warm, timeless songs.</p></article>
+    </div>
+    <div class="infl-early">
+      <p class="label">Earlier influences</p>
+      <ul>
+        <li><b>Michael Jackson</b><span>Melody, rhythm and performance</span></li>
+        <li><b>Jack Johnson</b><span>Laid-back acoustic storytelling</span></li>
+        <li><b>Angus &amp; Julia Stone</b><span>Aussie folk with heart</span></li>
+        <li><b>Queen</b><span>Big songs, no rules</span></li>
+      </ul>
     </div>
   </section>
 
