@@ -378,6 +378,12 @@ h2 em.gold{color:var(--gold)}
 .og .cities span{border-color:var(--rule);color:var(--muted)}
 .og .cities span b{color:var(--ink)}
 .og .empty-geo{border-color:var(--rule);color:var(--muted)}
+
+/* ---- Merch sticker ---- */
+.sticker{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:10px 16px;background:var(--gold);color:#1a1405;text-decoration:none;font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;transform:rotate(-3deg);box-shadow:0 6px 16px rgba(154,116,25,.28);transition:transform .2s ease,box-shadow .2s ease}
+.sticker:hover{transform:rotate(0deg) scale(1.04);box-shadow:0 8px 20px rgba(154,116,25,.35)}
+.sticker-arrow{display:inline-block;font-size:1rem;line-height:1}
+@media (prefers-reduced-motion:no-preference){.sticker-arrow{animation:bob 1.6s ease-in-out infinite}@keyframes bob{0%,100%{transform:translateY(-1px)}50%{transform:translateY(3px)}}}
 </style>
 </head>
 <body>
@@ -415,6 +421,7 @@ h2 em.gold{color:var(--gold)}
       <p class="mission-text hero-mission rise d2">I hope to <em class="nowrap">help &amp; heal</em> through the words that I write.</p>
       <p class="body rise d3">A 20-year-old Singer Songwriter from Australia. Mashing together alt folk with indie pop beats, telling stories of a new generation.</p>
       <p class="got-back rise d3">We've got your back!</p>
+      <a class="sticker rise d3" href="#merch">Merch available <span class="sticker-arrow" aria-hidden="true">↓</span></a>
     </div>
     <div class="photo"><img src="img/hero.jpg" alt="Byron Bennett smiling outdoors in the forest" style="object-position:68% 45%" loading="eager" decoding="async"></div>
   </section>
