@@ -55,7 +55,8 @@ p{margin:0}
   padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));
   background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
 .brand{font-family:var(--display);font-size:1.2rem;font-weight:400;text-decoration:none;letter-spacing:.01em;white-space:nowrap}
-.nav-links{display:flex;gap:36px;align-items:center}
+[hidden]{display:none!important}
+.nav-links{display:none}
 .nav-links a{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
 .nav-links a:hover{color:var(--muted)}
 .badge{background:var(--gold);color:#fff;font-size:.55rem;letter-spacing:.05em;padding:2px 6px;border-radius:9px;font-weight:700}
@@ -63,7 +64,7 @@ p{margin:0}
 .btn-listen{display:inline-flex;align-items:center;gap:7px;background:var(--green);color:#fff;text-decoration:none;font-family:var(--body);font-weight:600;font-size:.78rem;padding:7px 16px;border-radius:3px}
 .btn-listen:hover{filter:brightness(.94)}
 .btn-listen svg{width:15px;height:15px}
-.menu-btn{display:none;background:none;border:0;padding:8px;cursor:pointer;color:var(--ink)}
+.menu-btn{display:block;background:none;border:0;padding:8px;cursor:pointer;color:var(--ink)}
 .menu-btn span{display:block;width:20px;height:1.5px;background:currentColor;margin:4px 0}
 .mobile-menu{position:fixed;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));left:0;right:0;z-index:49;background:var(--paper);border-bottom:1px solid var(--rule);
   display:flex;flex-direction:column;gap:20px;padding-block:24px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
