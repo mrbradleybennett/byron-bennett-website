@@ -347,6 +347,27 @@ h2 em.gold{color:var(--gold)}
   .head-split{grid-template-columns:1fr}
   .has-bg::before{background:rgba(26,26,26,.86)}
 }
+
+/* ---- Merch ---- */
+.merch{border-top:1px solid var(--rule);background:var(--paper)}
+.merch-inner{padding-block:clamp(72px,9vw,112px);padding-left:var(--gut-l);padding-right:var(--gut-r);max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+@media (min-width:900px){.merch-inner{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
+.merch-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.merch-head>div{display:flex;flex-direction:column;gap:14px}
+.merch-head .cta{align-self:auto}
+.merch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.product{display:flex;flex-direction:column;gap:16px;text-decoration:none;color:var(--ink);border:1px solid var(--rule);background:var(--paper);padding:18px;transition:border-color .2s}
+.product:hover{border-color:var(--ink)}
+.product-img{position:relative;aspect-ratio:1/1;max-width:100%;background:var(--paper-2);overflow:hidden;display:grid;place-items:center}
+.product-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.product:hover .product-img img{transform:scale(1.03)}
+.product-ph{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--label)}
+.product-info{display:grid;grid-template-columns:1fr auto;column-gap:16px;align-items:baseline}
+.product-info h3{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;line-height:1.1}
+.product-meta{grid-column:1;font-size:.85rem;color:var(--muted)}
+.price{grid-column:2;grid-row:1;font-family:var(--mono);font-size:.9rem;font-variant-numeric:tabular-nums}
+.product-cta{font-family:var(--mono);font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-ink)}
+@media (max-width:640px){.merch-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -357,6 +378,7 @@ h2 em.gold{color:var(--gold)}
     <a href="#influences">Influences</a>
     <a href="#numbers">Stats &amp; Stuff</a>
     <a href="#b4-the-hype">B4 the Hype <span class="badge">24</span></a>
+  <a href="#merch">Merch</a>
   </nav>
   <div class="nav-right">
     <a class="btn-listen" href="https://open.spotify.com/artist/1A0DtKiRy94ckqbEYm7tFG" target="_blank" rel="noopener">
@@ -371,6 +393,7 @@ h2 em.gold{color:var(--gold)}
   <a href="#influences">Influences</a>
   <a href="#numbers">Stats &amp; Stuff</a>
   <a href="#b4-the-hype">B4 the Hype <span class="badge">24</span></a>
+  <a href="#merch">Merch</a>
 </nav>
 
 <main>
@@ -553,6 +576,31 @@ h2 em.gold{color:var(--gold)}
       </div>
     </div>
     <div class="photo"><img src="img/releases.jpg" alt="Byron Bennett dancing on the beach near the Golden Gate Bridge" style="object-position:55% 50%" loading="lazy" decoding="async"></div>
+  </section>
+
+  <!-- MERCH -->
+  <section class="merch" id="merch">
+    <div class="merch-inner">
+      <div class="merch-head">
+        <div>
+          <p class="label">Merch</p>
+          <h2>Wear the <em>story.</em></h2>
+        </div>
+        <a class="cta" href="https://byron-bennett-music.myshopify.com/collections/all" target="_blank" rel="noopener">Shop all merch →</a>
+      </div>
+      <div class="merch-grid">
+        <a class="product" href="https://byron-bennett-music.myshopify.com/products/unisex-t-shirt-black" target="_blank" rel="noopener">
+          <div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0798/1822/7735/files/unisex-staple-t-shirt-black-heather-front-6a0fb5b026692.jpg?v=1779414457&amp;width=800" alt="Black 855 unisex t-shirt" loading="lazy" decoding="async" onerror="this.remove()"><span class="product-ph">855 Tee · Black</span></div>
+          <div class="product-info"><h3>855 Unisex T-Shirt</h3><p class="product-meta">Black</p><p class="price">$43.03</p></div>
+          <span class="product-cta">Shop now →</span>
+        </a>
+        <a class="product" href="https://byron-bennett-music.myshopify.com/products/unisex-classic-tee-white" target="_blank" rel="noopener">
+          <div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0798/1822/7735/files/unisex-classic-tee-white-front-6a0effcf05807.jpg?v=1779367899&amp;width=800" alt="White unisex classic tee" loading="lazy" decoding="async" onerror="this.remove()"><span class="product-ph">Classic Tee · White</span></div>
+          <div class="product-info"><h3>Unisex Classic Tee</h3><p class="product-meta">White</p><p class="price">$40.00</p></div>
+          <span class="product-cta">Shop now →</span>
+        </a>
+      </div>
+    </div>
   </section>
 
   <!-- ORIGINS -->
