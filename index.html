@@ -404,6 +404,21 @@ h2 em.gold{color:var(--gold)}
 .infl-early b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.15}
 .infl-early span{font-size:.85rem;color:var(--muted);font-weight:300}
 @media (max-width:760px){.infl-early ul{grid-template-columns:1fr 1fr}.infl-early li:nth-child(3){padding-left:0;border-left:0}.infl-early li:nth-child(n+3){border-top:1px solid var(--rule)}}
+
+/* ---- Fan comments (rotating) ---- */
+.fans{border-top:1px solid var(--rule);background:var(--paper-2)}
+.fans-inner{padding-block:clamp(64px,8vw,104px);padding-left:var(--gut-l);padding-right:var(--gut-r);max-width:980px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:28px;text-align:center}
+.fan-stage{display:grid;width:100%}
+.fan-quote{grid-area:1/1;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s linear .6s}
+.fan-quote.is-active{opacity:1;visibility:visible;transition:opacity .6s ease}
+.fan-quote blockquote{margin:0;font-family:var(--display);font-weight:300;font-style:italic;font-size:clamp(1.35rem,2.6vw,2.1rem);line-height:1.3;max-width:34ch;text-wrap:balance;color:var(--ink)}
+.fan-quote figcaption{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--gold-ink)}
+.fan-controls{display:flex;align-items:center;gap:14px}
+.fan-arrow{background:none;border:1px solid var(--rule);width:36px;height:36px;border-radius:50%;cursor:pointer;color:var(--ink);font-size:.95rem}
+.fan-arrow:hover{border-color:var(--ink)}
+.fan-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.fan-dot{width:8px;height:8px;padding:0;border-radius:50%;border:0;background:var(--rule);cursor:pointer}
+.fan-dot.is-active{background:var(--gold)}
 </style>
 </head>
 <body>
@@ -566,6 +581,52 @@ h2 em.gold{color:var(--gold)}
           </div>
           <p class="label src">Source: <a href="https://songstats.com/artist/i5eu9tx4/byron-bennett" target="_blank" rel="noopener">Songstats</a></p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FANS -->
+  <section class="fans" id="fans" aria-roledescription="carousel" aria-label="What fans are saying">
+    <div class="fans-inner">
+      <p class="label">What fans are saying</p>
+      <div class="fan-stage" id="fanStage" aria-live="polite">
+        <figure class="fan-quote is-active" data-i="0">
+          <blockquote>“There are people who can sing, and then there are those who do more than just sing. With every word they pronounce, every note they carry, and every emotion in their voice, they tell a story that touches your soul and makes you feel every single word. ❤️🎶”</blockquote>
+          <figcaption>— ITS-ya-GIRL-Chantal 🇨🇦</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="1" aria-hidden="true">
+          <blockquote>“I'm absolutely speechless! I have not felt so much emotion like this in a long time when listening to music. Your delivery, your emotion is just intoxicating!!!”</blockquote>
+          <figcaption>— anikadanika</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="2" aria-hidden="true">
+          <blockquote>“Day by day, people listen to music that may be catchy, their favourite artist, etc. but there's something amazing about finding music from an artist that can make you stop everything you're doing and just be left speechless while you listen. Amazing work brother, keep making music like this 👏”</blockquote>
+          <figcaption>— @LegendBDA.441</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="3" aria-hidden="true">
+          <blockquote>“First time seeing you and already added you on Spotify. Your voice has a kind of power that reaches you deeper than ‘all the others’. You're already a star but I know you're gonna show the world. Amazing. 🫶”</blockquote>
+          <figcaption>— Lo</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="4" aria-hidden="true">
+          <blockquote>“Your tone and vibe shook me to my core! Keep it coming! Amazing, rich, flawless raw talent. 🥰👀”</blockquote>
+          <figcaption>— 4Jst4kcks</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="5" aria-hidden="true">
+          <blockquote>“I am here for thisssss… what a TALENT!!! Thank you for sharing with us. Big things gonna happen in your future kid… stay focused”</blockquote>
+          <figcaption>— theboobiebus</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="6" aria-hidden="true">
+          <blockquote>“The way I paused this and immediately blurted out my own remix before hearing the whole song… what a tempo.. crying in my kitchen listening on Spotify. You got a fan.”</blockquote>
+          <figcaption>— Kaitlyn Miller</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="7" aria-hidden="true">
+          <blockquote>“People making jokes but this is exactly how a music career starts.”</blockquote>
+          <figcaption>— Samantha ✩ · 53.6K likes</figcaption>
+        </figure>
+      </div>
+      <div class="fan-controls">
+        <button type="button" class="fan-arrow" id="fanPrev" aria-label="Previous comment">←</button>
+        <div class="fan-dots"><button type="button" class="fan-dot is-active" data-i="0" aria-label="Show comment 1 of 8"></button><button type="button" class="fan-dot" data-i="1" aria-label="Show comment 2 of 8"></button><button type="button" class="fan-dot" data-i="2" aria-label="Show comment 3 of 8"></button><button type="button" class="fan-dot" data-i="3" aria-label="Show comment 4 of 8"></button><button type="button" class="fan-dot" data-i="4" aria-label="Show comment 5 of 8"></button><button type="button" class="fan-dot" data-i="5" aria-label="Show comment 6 of 8"></button><button type="button" class="fan-dot" data-i="6" aria-label="Show comment 7 of 8"></button><button type="button" class="fan-dot" data-i="7" aria-label="Show comment 8 of 8"></button></div>
+        <button type="button" class="fan-arrow" id="fanNext" aria-label="Next comment">→</button>
       </div>
     </div>
   </section>
@@ -928,6 +989,24 @@ const firebaseConfig = {
       grid.append(a);
     });
   }).catch(function(){});
+})();
+</script>
+<script>
+/* Fan comments: rotate every 7s; pause on hover/focus; no auto-rotate for reduced motion. */
+(function(){
+  var stage=document.getElementById("fanStage"); if(!stage) return;
+  var q=[].slice.call(stage.querySelectorAll(".fan-quote")), d=[].slice.call(document.querySelectorAll(".fan-dot")), i=0, t=null;
+  function show(n){i=(n+q.length)%q.length;q.forEach(function(e,k){var on=k===i;e.classList.toggle("is-active",on);e.setAttribute("aria-hidden",on?"false":"true");});d.forEach(function(e,k){e.classList.toggle("is-active",k===i);});}
+  var still=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function play(){stop();if(!still)t=setInterval(function(){show(i+1);},7000);}
+  function stop(){if(t)clearInterval(t);t=null;}
+  document.getElementById("fanPrev").onclick=function(){show(i-1);play();};
+  document.getElementById("fanNext").onclick=function(){show(i+1);play();};
+  d.forEach(function(e){e.onclick=function(){show(+e.dataset.i);play();};});
+  var box=document.getElementById("fans");
+  box.addEventListener("mouseenter",stop);box.addEventListener("mouseleave",play);
+  box.addEventListener("focusin",stop);box.addEventListener("focusout",play);
+  play();
 })();
 </script>
 </body>
