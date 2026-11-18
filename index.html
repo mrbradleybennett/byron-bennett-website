@@ -407,7 +407,9 @@ h2 em.gold{color:var(--gold)}
 
 /* ---- Fan comments (rotating) ---- */
 .fans{border-top:1px solid var(--rule);background:var(--paper-2)}
-.fans-inner{padding-block:clamp(64px,8vw,104px);padding-left:var(--gut-l);padding-right:var(--gut-r);max-width:980px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:28px;text-align:center}
+.fans-inner{padding-block:clamp(64px,8vw,104px);padding-left:var(--gut-l);padding-right:var(--gut-r);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:28px;text-align:center;min-width:0}
+@media (min-width:900px){.fans-inner{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:64px}}
+.fans .fan-quote blockquote{font-size:clamp(1.25rem,2.1vw,1.8rem);max-width:30ch}
 .fan-stage{display:grid;width:100%}
 .fan-quote{grid-area:1/1;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s linear .6s}
 .fan-quote.is-active{opacity:1;visibility:visible;transition:opacity .6s ease}
@@ -456,7 +458,6 @@ h2 em.gold{color:var(--gold)}
       <h1 class="rise d1">I'm Byron<br><em>Bennett</em></h1>
       <p class="mission-text hero-mission rise d2">I hope to <em class="nowrap">help &amp; heal</em> through the words that I write.</p>
       <p class="body rise d3">A 20-year-old Singer Songwriter from Australia. Mashing together alternative folk storytelling with indie pop beats, telling stories of a new generation.</p>
-      <p class="got-back rise d3">We've got your back!</p>
     </div>
     <div class="photo"><img src="img/hero.jpg" alt="Byron Bennett smiling outdoors in the forest" style="object-position:68% 45%" loading="eager" decoding="async"></div>
   </section>
@@ -473,8 +474,56 @@ h2 em.gold{color:var(--gold)}
         <p class="body">Some people loved it ... some didn't.<br>Some had my back ... some didn't.<br>That's high school.</p>
         <p class="body">When I finished school I surrounded myself with people who believed in me and started releasing music under my own name.</p>
         <p class="body">Wherever you are on your journey, I hope my music connects with you and helps you on your path.</p>
+        <p class="got-back">We've got your back!</p>
       </div>
     </div>
+  </section>
+
+  <!-- FANS -->
+  <section class="fans split" id="fans" aria-roledescription="carousel" aria-label="What fans are saying">
+    <div class="fans-inner">
+      <p class="label">What fans are saying</p>
+      <div class="fan-stage" id="fanStage" aria-live="polite">
+        <figure class="fan-quote is-active" data-i="0">
+          <blockquote>“There are people who can sing, and then there are those who do more than just sing. With every word they pronounce, every note they carry, and every emotion in their voice, they tell a story that touches your soul and makes you feel every single word. ❤️🎶”</blockquote>
+          <figcaption>— ITS-ya-GIRL-Chantal 🇨🇦</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="1" aria-hidden="true">
+          <blockquote>“I'm absolutely speechless! I have not felt so much emotion like this in a long time when listening to music. Your delivery, your emotion is just intoxicating!!!”</blockquote>
+          <figcaption>— anikadanika</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="2" aria-hidden="true">
+          <blockquote>“Day by day, people listen to music that may be catchy, their favourite artist, etc. but there's something amazing about finding music from an artist that can make you stop everything you're doing and just be left speechless while you listen. Amazing work brother, keep making music like this 👏”</blockquote>
+          <figcaption>— @LegendBDA.441</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="3" aria-hidden="true">
+          <blockquote>“First time seeing you and already added you on Spotify. Your voice has a kind of power that reaches you deeper than ‘all the others’. You're already a star but I know you're gonna show the world. Amazing. 🫶”</blockquote>
+          <figcaption>— Lo</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="4" aria-hidden="true">
+          <blockquote>“Your tone and vibe shook me to my core! Keep it coming! Amazing, rich, flawless raw talent. 🥰👀”</blockquote>
+          <figcaption>— 4Jst4kcks</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="5" aria-hidden="true">
+          <blockquote>“I am here for thisssss… what a TALENT!!! Thank you for sharing with us. Big things gonna happen in your future kid… stay focused”</blockquote>
+          <figcaption>— theboobiebus</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="6" aria-hidden="true">
+          <blockquote>“The way I paused this and immediately blurted out my own remix before hearing the whole song… what a tempo.. crying in my kitchen listening on Spotify. You got a fan.”</blockquote>
+          <figcaption>— Kaitlyn Miller</figcaption>
+        </figure>
+        <figure class="fan-quote" data-i="7" aria-hidden="true">
+          <blockquote>“People making jokes but this is exactly how a music career starts.”</blockquote>
+          <figcaption>— Samantha ✩ · 53.6K likes</figcaption>
+        </figure>
+      </div>
+      <div class="fan-controls">
+        <button type="button" class="fan-arrow" id="fanPrev" aria-label="Previous comment">←</button>
+        <div class="fan-dots"><button type="button" class="fan-dot is-active" data-i="0" aria-label="Show comment 1 of 8"></button><button type="button" class="fan-dot" data-i="1" aria-label="Show comment 2 of 8"></button><button type="button" class="fan-dot" data-i="2" aria-label="Show comment 3 of 8"></button><button type="button" class="fan-dot" data-i="3" aria-label="Show comment 4 of 8"></button><button type="button" class="fan-dot" data-i="4" aria-label="Show comment 5 of 8"></button><button type="button" class="fan-dot" data-i="5" aria-label="Show comment 6 of 8"></button><button type="button" class="fan-dot" data-i="6" aria-label="Show comment 7 of 8"></button><button type="button" class="fan-dot" data-i="7" aria-label="Show comment 8 of 8"></button></div>
+        <button type="button" class="fan-arrow" id="fanNext" aria-label="Next comment">→</button>
+      </div>
+    </div>
+    <div class="photo"><img src="img/genre.jpg" alt="Byron Bennett backlit by the sun in the forest" style="object-position:70% 35%" loading="lazy" decoding="async"></div>
   </section>
 
   <!-- INFLUENCES -->
@@ -580,80 +629,6 @@ h2 em.gold{color:var(--gold)}
             <a href="https://listen.tidal.com/artist/18279890/" target="_blank" rel="noopener">Tidal<span>↗</span></a>
           </div>
           <p class="label src">Source: <a href="https://songstats.com/artist/i5eu9tx4/byron-bennett" target="_blank" rel="noopener">Songstats</a></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FANS -->
-  <section class="fans" id="fans" aria-roledescription="carousel" aria-label="What fans are saying">
-    <div class="fans-inner">
-      <p class="label">What fans are saying</p>
-      <div class="fan-stage" id="fanStage" aria-live="polite">
-        <figure class="fan-quote is-active" data-i="0">
-          <blockquote>“There are people who can sing, and then there are those who do more than just sing. With every word they pronounce, every note they carry, and every emotion in their voice, they tell a story that touches your soul and makes you feel every single word. ❤️🎶”</blockquote>
-          <figcaption>— ITS-ya-GIRL-Chantal 🇨🇦</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="1" aria-hidden="true">
-          <blockquote>“I'm absolutely speechless! I have not felt so much emotion like this in a long time when listening to music. Your delivery, your emotion is just intoxicating!!!”</blockquote>
-          <figcaption>— anikadanika</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="2" aria-hidden="true">
-          <blockquote>“Day by day, people listen to music that may be catchy, their favourite artist, etc. but there's something amazing about finding music from an artist that can make you stop everything you're doing and just be left speechless while you listen. Amazing work brother, keep making music like this 👏”</blockquote>
-          <figcaption>— @LegendBDA.441</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="3" aria-hidden="true">
-          <blockquote>“First time seeing you and already added you on Spotify. Your voice has a kind of power that reaches you deeper than ‘all the others’. You're already a star but I know you're gonna show the world. Amazing. 🫶”</blockquote>
-          <figcaption>— Lo</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="4" aria-hidden="true">
-          <blockquote>“Your tone and vibe shook me to my core! Keep it coming! Amazing, rich, flawless raw talent. 🥰👀”</blockquote>
-          <figcaption>— 4Jst4kcks</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="5" aria-hidden="true">
-          <blockquote>“I am here for thisssss… what a TALENT!!! Thank you for sharing with us. Big things gonna happen in your future kid… stay focused”</blockquote>
-          <figcaption>— theboobiebus</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="6" aria-hidden="true">
-          <blockquote>“The way I paused this and immediately blurted out my own remix before hearing the whole song… what a tempo.. crying in my kitchen listening on Spotify. You got a fan.”</blockquote>
-          <figcaption>— Kaitlyn Miller</figcaption>
-        </figure>
-        <figure class="fan-quote" data-i="7" aria-hidden="true">
-          <blockquote>“People making jokes but this is exactly how a music career starts.”</blockquote>
-          <figcaption>— Samantha ✩ · 53.6K likes</figcaption>
-        </figure>
-      </div>
-      <div class="fan-controls">
-        <button type="button" class="fan-arrow" id="fanPrev" aria-label="Previous comment">←</button>
-        <div class="fan-dots"><button type="button" class="fan-dot is-active" data-i="0" aria-label="Show comment 1 of 8"></button><button type="button" class="fan-dot" data-i="1" aria-label="Show comment 2 of 8"></button><button type="button" class="fan-dot" data-i="2" aria-label="Show comment 3 of 8"></button><button type="button" class="fan-dot" data-i="3" aria-label="Show comment 4 of 8"></button><button type="button" class="fan-dot" data-i="4" aria-label="Show comment 5 of 8"></button><button type="button" class="fan-dot" data-i="5" aria-label="Show comment 6 of 8"></button><button type="button" class="fan-dot" data-i="6" aria-label="Show comment 7 of 8"></button><button type="button" class="fan-dot" data-i="7" aria-label="Show comment 8 of 8"></button></div>
-        <button type="button" class="fan-arrow" id="fanNext" aria-label="Next comment">→</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- GENRE POLL -->
-  <section class="poll" id="genre">
-    <div class="poll-inner">
-      <div class="head-split">
-        <div class="poll-head">
-          <p class="label">You decide</p>
-          <h2>Which genre <em>connects most?</em></h2>
-        </div>
-        <div class="head-photo"><img src="img/genre.jpg" alt="Byron Bennett backlit by the sun in the forest" style="object-position:70% 35%" loading="lazy" decoding="async"></div>
-      </div>
-      <div class="poll-grid">
-        <div class="poll-box">
-          <p class="label" id="pollHint">Pick Which Genre?</p>
-          <div class="choices" id="choices" role="group" aria-labelledby="pollHint"></div>
-          <div class="poll-actions">
-            <button class="btn-dark" id="voteBtn" type="button" disabled>Submit</button>
-            <span class="poll-status" id="pollStatus" role="status"></span>
-          </div>
-        </div>
-        <div class="results" id="results" aria-live="polite">
-          <div class="results-head"><p class="label">Live results</p><p class="label" id="voterCount">Loading…</p></div>
-          <ul class="bars" id="bars"></ul>
-          <p class="fine">Percent of voters who ticked each option. People can tick more than one, so totals can add up to more than 100%.</p>
         </div>
       </div>
     </div>
@@ -804,7 +779,7 @@ const firebaseConfig = {
     "Mexico":["Mexico City","Guadalajara","Monterrey"],
     "Other":[]
   };
-  var $=function(id){return document.getElementById(id)};
+  var $=function(id){return document.getElementById(id)||document.createElement("div")};
 
   /* ---------- poll UI ---------- */
   var picked=new Set(), votes=[], myVote=null, canWrite=true, db=null, uid=null;
